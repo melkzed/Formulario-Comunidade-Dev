@@ -1,2 +1,40 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Text files
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.json5 text eol=lf
+
+# Source code
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+
+# Documents
+*.pdf binary
+*.doc binary
+*.docx binary
+
+# Images
+*.jpeg binary
+*.jpg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.svg text eol=lf
+
+# Archives
+*.zip binary
+*.7z binary
+*.rar binary
+*.gz binary
+*.tar binary
+
+# Git
+.gitattributes text eol=lf
+.gitignore text eol=lf
