@@ -92,6 +92,11 @@ No painel do EmailJS, configure o template com:
 ```
 Formulário Comunidade Dev/
 ├── formulário.html              # Página principal
+├── src/
+│   ├── css/
+│   │   └── style.css           # Estilos do formulário
+│   └── js/
+│       └── app.js              # Lógica do formulário e envio de email
 ├── icon/
 │   └── icon.jpeg               # Favicon da aba
 ├── Regulamento_Devs_Conectados.pdf  # Regulamento (linkado no form)
