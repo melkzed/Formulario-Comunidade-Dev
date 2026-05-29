@@ -277,7 +277,7 @@ function initForm() {
     var teamLabel = currentTeamSize === 1 ? 'Sem equipe' : (teamName || 'Sem nome de equipe');
     var modes = [];
     if (bwOn) modes.push('BedWars');
-    if (hgOn) modes.push('Hunger Games');
+    if (hgOn) modes.push('SkyWars');
     var modesStr = modes.join(' + ');
 
     var members = [];

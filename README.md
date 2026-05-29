@@ -13,7 +13,7 @@ Formulário web para inscrição no **1º Campeonato Gamer Devs Conectados**, co
 
 - ✅ **Seleção de modos de jogo:**
   - BedWars
-  - Hunger Games
+  - SkyWars
 
 - ✅ **Confirmação por email:**
   - E-mail automático para cada participante via EmailJS
@@ -128,7 +128,7 @@ Aberto no cliente de email local (mailto) com:
 - **Nome:** 1º Campeonato Gamer Devs Conectados
 - **Data:** 30 de Maio de 2026
 - **Jogo:** Minecraft Java Edition
-- **Modos:** BedWars + Hunger Games
+- **Modos:** BedWars + SkyWars
 - **Tamanho de equipe:** 3 jogadores (ou 2 + espera, ou individual)
 
 ---
