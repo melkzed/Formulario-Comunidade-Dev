@@ -1,89 +1,90 @@
-# 📋 Formulário de Inscrição — Devs Conectados
+﻿# 📋 Formulário de Inscrição — Devs Conectados
 
-Formulário web para inscrição no **1º Campeonato Gamer Devs Conectados**, com suporte a equipes de 3 jogadores, duplas e inscrições individuais. Integrado com **EmailJS** para envio automático de confirmação.
+Formulário web para inscrição no **1º Campeonato Gamer Devs Conectados**, com suporte a inscrições individuais, duplas e equipes de 3 jogadores. Integração com **EmailJS** para envio automático de confirmação.
 
 ---
 
 ## ✨ Recursos
 
-- ✅ **Três tipos de inscrição:**
+- ✅ **Tipos de inscrição:**
+  - Individual
+  - Dupla
   - Equipe de 3 jogadores
-  - Dupla (2 jogadores + vaga em espera)
-  - Individual (sem nome de equipe)
-
-- ✅ **Seleção de modos de jogo:**
-  - BedWars
-  - SkyWars
-
-- ✅ **Confirmação por email:**
-  - E-mail automático para cada participante via EmailJS
-  - E-mail para administrador (via mailto)
-  - Identificação de tipo de inscrição
-
+- ✅ **Modos de jogo:** BedWars e SkyWars
+- ✅ **Envio de confirmação por email:**
+  - Email ao participante via EmailJS
+  - Email ao administrador via `mailto`
 - ✅ **Validação dinâmica:**
-  - Campos obrigatórios conforme tipo de inscrição
-  - Máscara automática para telefone
-  - Feedback visual de erros
-
-- ✅ **Design moderno:**
-  - Tema escuro estilo Matrix/Gaming
-  - Responsivo para mobile e desktop
-  - Animações suaves
-
-- ✅ **GitHub Pages ready:**
-  - Sem dependências externas (exceto EmailJS)
-  - Funciona 100% client-side
+  - Campos obrigatórios ajustados ao tipo de inscrição
+  - Máscara de telefone automática
+  - Feedback visual de erros em tempo real
+- ✅ **Design responsivo:**
+  - Visual escuro e estilo gamer
+  - Compatível com desktop e mobile
+- ✅ **Projeto 100% client-side:**
+  - Sem dependências de backend
+  - Funciona localmente ou no GitHub Pages
 
 ---
 
 ## 🚀 Como Usar
 
-### 1. Acesso local
-Abra `formulário.html` no navegador.
+### Acesso pelo GitHub Pages
+Acesse o formulário diretamente em:
 
-### 2. Acesso no GitHub Pages
-Deploy este repositório no GitHub Pages e a URL será:
-```
-https://seu-usuario.github.io/Formulário-Comunidade-Dev/formulário.html
+```text
+https://melkzed.github.io/Formulario-Comunidade-Dev/
 ```
 
-### 3. Preenchimento do Formulário
-1. Selecione o tipo de inscrição (Equipe 3, Dupla ou Individual)
-2. Preencha o nome da equipe (se aplicável)
+### Acesso local (opcional)
+Se quiser, abra `index.html` no navegador para testar localmente.
+
+### Preenchimento do formulário
+1. Escolha o tipo de inscrição (Individual, Dupla ou Equipe de 3)
+2. Preencha o nome da equipe se aplicável
 3. Selecione os modos de jogo
-4. Preencha os dados dos membros (nome, nick, email, telefone)
+4. Complete os dados dos participantes
 5. Clique em **ENVIAR INSCRIÇÃO**
 
 ---
 
 ## ⚙️ Configuração EmailJS
 
-As chaves de EmailJS já estão configuradas no código:
+As configurações padrão do EmailJS estão definidas no código:
 - **Public Key:** `EqY4ZvSg14BggUlh2`
 - **Service ID:** `service_j6hjcqn`
 - **Template ID:** `template_ul3c6rm`
 
-### Se precisar alterar as chaves:
-1. Abra `formulário.html` com o parâmetro `?admin=1`:
-   ```
-   formulário.html?admin=1
+### Atualizar chaves do EmailJS
+1. Acesse `index.html` com o parâmetro `?admin=1`:
+   ```text
+   index.html?admin=1
    ```
 2. O painel de configuração aparecerá
-3. Insira as novas chaves (caso necessário)
+3. Cole as novas chaves
 4. Clique em **Salvar e Ativar**
 
-### Template do EmailJS
-No painel do EmailJS, configure o template com:
-- **To Email:** `{{to_email}}`
-- **Subject:** `Inscrição confirmada — {{team_label}} · Devs Conectados`
-- **Corpo:** Use as variáveis:
-  - `{{member_name}}` — Nome do participante
-  - `{{member_nick}}` — Nick do Minecraft
-  - `{{registration_type}}` — Tipo (Individual/Dupla/Equipe de 3)
-  - `{{team_label}}` — Nome da equipe ou "Sem equipe"
-  - `{{modes}}` — Modos selecionados
-  - `{{event_date}}` — Data do evento
-  - `{{event_name}}` — Nome do evento
+---
+
+## 📥 Template de EmailJS
+
+Use as seguintes variáveis no template do EmailJS:
+- `{{to_email}}`
+- `{{to_name}}`
+- `{{member_name}}`
+- `{{member_nick}}`
+- `{{team_name}}`
+- `{{team_label}}`
+- `{{registration_type}}`
+- `{{modes}}`
+- `{{event_date}}`
+- `{{event_name}}`
+
+Sugestão de assunto:
+
+```text
+Inscrição confirmada — {{team_label}} · Devs Conectados
+```
 
 ---
 
@@ -91,35 +92,26 @@ No painel do EmailJS, configure o template com:
 
 ```
 Formulário Comunidade Dev/
-├── formulário.html              # Página principal
+├── index.html                          # Página principal do formulário
 ├── src/
 │   ├── css/
-│   │   └── style.css           # Estilos do formulário
+│   │   └── style.css                   # Estilos do formulário
 │   └── js/
-│       └── app.js              # Lógica do formulário e envio de email
+│       └── app.js                      # Lógica do formulário e envio via EmailJS
 ├── icon/
-│   └── icon.jpeg               # Favicon da aba
-├── Regulamento_Devs_Conectados.pdf  # Regulamento (linkado no form)
-└── README.md                   # Este arquivo
+│   └── icon.jpeg                       # Ícone do projeto
+├── docs/
+│   └── Regulamento_Devs_Conectados.pdf # Regulamento do evento
+└── README.md                           # Este arquivo
 ```
 
 ---
 
-## 📧 Fluxo de Emails
+## 📧 Fluxo de Inscrição
 
-### 1. E-mail para o Participante
-Enviado automaticamente via EmailJS com:
-- Confirmação de inscrição
-- Tipo de inscrição (Individual/Dupla/Equipe)
-- Dados da equipe (se houver)
-- Modos de jogo
-- Data do evento
-
-### 2. E-mail para o Administrador
-Aberto no cliente de email local (mailto) com:
-- Dados completos de todos os membros
-- Tipo de inscrição
-- Modos selecionados
+- Participante recebe email de confirmação via EmailJS.
+- Administrador recebe um email pré-preenchido no cliente local via `mailto`.
+- Dados de equipe, tipo de inscrição e modos de jogo são incluídos na mensagem.
 
 ---
 
@@ -129,60 +121,60 @@ Aberto no cliente de email local (mailto) com:
 - **Data:** 30 de Maio de 2026
 - **Jogo:** Minecraft Java Edition
 - **Modos:** BedWars + SkyWars
-- **Tamanho de equipe:** 3 jogadores (ou 2 + espera, ou individual)
+- **Tamanhos válidos:** individual, dupla ou equipe de 3
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **HTML5** — Estrutura
-- **CSS3** — Estilo (sem frameworks)
-- **JavaScript Vanilla** — Lógica e validação
-- **EmailJS** — Envio de emails
+- **HTML5** — Estrutura da página
+- **CSS3** — Estilo e responsividade
+- **JavaScript Vanilla** — Validação e envio de formulários
+- **EmailJS** — Envio de emails diretamente do navegador
 
 ---
 
 ## 📝 Validação de Campos
 
-| Campo | Obrigatório | Tipo |
-|-------|-----------|------|
-| Nome da Equipe | Não (Individual) / Não (Dupla) / Sim (Equipe) | Texto |
-| Modo de Jogo | Sim | Checkbox (min. 1) |
-| Nome do Membro | Sim | Texto (máx. 60 caracteres) |
-| Nick Minecraft | Sim | Texto (máx. 32 caracteres) |
+| Campo | Obrigatório | Comentário |
+|-------|------------|------------|
+| Tipo de inscrição | Sim | Individual, Dupla ou Equipe |
+| Nome da equipe | Não para Individual / Sim para Dupla e Equipe | Texto |
+| Modos de jogo | Sim | Pelo menos 1 modo selecionado |
+| Nome do membro | Sim | Texto |
+| Nick do Minecraft | Sim | Texto |
 | Email | Sim | Email válido |
-| Telefone | Sim | Texto (mín. 10 dígitos) |
+| Telefone | Sim | Pelo menos 10 dígitos |
 
 ---
 
 ## 🔒 Segurança
 
-- As chaves do EmailJS (Public Key, Service ID, Template ID) são visíveis no código, mas isto é por design — a Public Key é pública por natureza.
-- O formulário não armazena dados localmente (exceto config de admin).
-- Todos os dados são enviados diretamente para EmailJS.
+- O formulário não usa backend próprio.
+- As chaves do EmailJS são necessárias apenas para o serviço do cliente.
+- As configurações são armazenadas localmente em `localStorage` apenas para facilitar o admin.
 
 ---
 
-## 🤝 Contribuindo
+## 🤝 Como Contribuir
 
-Para sugestões ou melhorias:
 1. Faça um fork do repositório
-2. Crie uma branch com sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
+2. Crie uma branch com sua feature (`git checkout -b feature/nome-da-feature`)
+3. Faça commit das mudanças (`git commit -m 'Adiciona <descrição>'`)
+4. Envie para o repositório remoto (`git push origin feature/nome-da-feature`)
 5. Abra um Pull Request
 
 ---
 
 ## 📄 Licença
 
-Este projeto é de código aberto e livre para usar, modificar e distribuir.
+Este projeto é de código aberto e pode ser usado, modificado e distribuído livremente.
 
 ---
 
-## 📞 Suporte
+## 📞 Contato
 
-Para dúvidas sobre inscrição, acesse o Discord da comunidade **Devs Conectados** ou responda para: **melkzedektech@gmail.com**
+Para dúvidas ou sugestões, envie email para **melkzedektech@gmail.com**
 
 ---
 
