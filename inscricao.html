@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição - Valorant Championship - Devs Conectados</title>
+  <link rel="icon" href="icon/icon.jpeg" type="image/jpeg">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+
+<body class="page-inscricao">
+  <div class="dots-tl"></div>
+  <div class="dots-tr"></div>
+  <div class="dots-bl"></div>
+  <div class="dots-br"></div>
+
+  <div id="success-screen">
+    <div class="success-box">
+      <div class="success-icon">OK</div>
+      <div class="success-title">Inscrição enviada</div>
+      <div class="success-team" id="success-team-name"></div>
+      <div class="success-sub" id="success-sub">
+        Sua equipe foi registrada com sucesso. Aguarde a divulgação das chaves no Discord.
+      </div>
+      <button class="success-close" type="button" id="success-close">Fechar</button>
+    </div>
+  </div>
+
+  <div class="form-shell">
+    <header class="top-nav compact-nav">
+      <a class="brand-link" href="index.html" aria-label="Devs Conectados">
+        <img src="icon/icon.jpeg" alt="">
+        <span>&lt;/&gt; Devs Conectados</span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Home</a>
+        <a class="active" href="inscricao.html">Inscrição</a>
+        <a href="docs/Regulamento_Devs_Conectados.pdf" target="_blank" rel="noopener">Regulamento</a>
+      </nav>
+    </header>
+
+    <div class="setup-banner hidden" id="setup-banner">
+      <button class="setup-banner-header" id="setup-header" type="button">
+        <span>Configuração EmailJS - administração</span>
+        <span class="toggle" id="setup-toggle">v</span>
+      </button>
+      <div class="setup-banner-body" id="setup-body">
+        <div class="setup-step">
+          <div class="step-num">1</div>
+          <div class="step-text">Acesse <a href="https://www.emailjs.com" target="_blank" rel="noopener">emailjs.com</a> e use a conta conectada ao email da organização.</div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">2</div>
+          <div class="step-text">Copie o <strong>Service ID</strong>, o <strong>Template ID</strong> e a <strong>Public Key</strong>.</div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Cole os valores abaixo e clique em <strong>Salvar e ativar</strong>. Este painel aparece apenas com <code>?admin=1</code>.</div>
+        </div>
+        <div class="config-row">
+          <div class="config-field">
+            <label for="cfg-pubkey">Public Key</label>
+            <input type="text" id="cfg-pubkey" placeholder="user_XXXXXXXXXXXXXXX">
+          </div>
+          <div class="config-field">
+            <label for="cfg-service">Service ID</label>
+            <input type="text" id="cfg-service" placeholder="service_XXXXXXX">
+          </div>
+          <div class="config-field">
+            <label for="cfg-template">Template ID</label>
+            <input type="text" id="cfg-template" placeholder="template_XXXXXXX">
+          </div>
+          <button class="save-config-btn" id="save-config" type="button">Salvar e ativar</button>
+        </div>
+        <div id="config-status" class="config-status"></div>
+      </div>
+    </div>
+
+    <main>
+      <section class="form-header" aria-labelledby="form-title">
+        <p class="eyebrow">&lt;/&gt; Devs Conectados</p>
+        <div class="header-logo">&lt;/&gt;</div>
+        <h1 id="form-title">Valorant</h1>
+        <div class="header-sub-title">Championship</div>
+        <p class="header-sub">5x5 competitivo - 20 de junho de 2026 - 19:00</p>
+        <div class="header-divider"></div>
+      </section>
+
+      <div class="event-strip">
+        <div class="event-chip"><span class="dot"></span>20 de junho - 19:00</div>
+        <div class="event-chip"><span class="dot"></span>Valorant - Riot Games</div>
+        <div class="event-chip"><span class="dot"></span>Equipes 5x5</div>
+        <div class="event-chip"><span class="dot"></span>Eliminação direta</div>
+      </div>
+
+      <a class="reg-banner" href="docs/Regulamento_Devs_Conectados.pdf" target="_blank" rel="noopener">
+        <span class="reg-banner-icon">PDF</span>
+        <div class="reg-banner-text">
+          <div class="reg-banner-title">Regulamento oficial do evento</div>
+          <div class="reg-banner-sub">Leia o regulamento antes de se inscrever</div>
+        </div>
+        <span class="reg-banner-arrow">abrir</span>
+      </a>
+
+      <form id="valorant-form" novalidate>
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">01</div>
+            <div class="card-title">Nome da equipe</div>
+          </div>
+          <div class="card-body">
+            <div class="field" id="f-team">
+              <label for="team-name">Nome da equipe</label>
+              <input type="text" id="team-name" placeholder="Ex: Devs Esports" maxlength="40" autocomplete="off">
+              <span class="err-msg">Informe o nome da equipe</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">02</div>
+            <div class="card-title">Capitão da equipe<small>Responsável pela comunicação oficial</small></div>
+          </div>
+          <div class="card-body">
+            <div class="field-row">
+              <div class="field" id="f-cap-name">
+                <label for="cap-name">Nome completo</label>
+                <input type="text" id="cap-name" placeholder="Nome real" maxlength="60" autocomplete="off">
+                <span class="err-msg">Informe o nome do capitão</span>
+              </div>
+              <div class="field" id="f-cap-tag">
+                <label for="cap-tag">Nick e tag do Valorant</label>
+                <input type="text" id="cap-tag" placeholder="Jogador#BR1" maxlength="32" autocomplete="off">
+                <span class="err-msg">Informe nick e tag</span>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field" id="f-cap-rank">
+                <label for="cap-rank">Rank atual</label>
+                <select id="cap-rank">
+                  <option value="">Selecione o rank</option>
+                </select>
+                <span class="err-msg">Selecione o rank</span>
+              </div>
+              <div class="field" id="f-cap-phone">
+                <label for="cap-phone">Celular</label>
+                <input type="tel" id="cap-phone" placeholder="(11) 99999-9999" maxlength="16" autocomplete="off">
+                <span class="err-msg">Informe o celular</span>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field" id="f-cap-email">
+                <label for="cap-email">Email</label>
+                <input type="email" id="cap-email" placeholder="capitao@email.com" maxlength="80" autocomplete="off">
+                <span class="err-msg">Informe um email válido</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">03</div>
+            <div class="card-title">Jogadores titulares<small>4 jogadores além do capitão</small></div>
+          </div>
+          <div class="card-body" id="titulares-body"></div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">04</div>
+            <div class="card-title">Jogadores reservas<small>Opcional, até 2 reservas</small></div>
+          </div>
+          <div class="card-body">
+            <button class="reserve-toggle" id="toggle-r1" type="button" data-reserve="1">
+              <span class="reserve-toggle-icon">+</span>
+              <span>
+                <span class="reserve-toggle-text">Adicionar reserva 1</span>
+                <span class="reserve-toggle-sub">Inclua um jogador reserva</span>
+              </span>
+            </button>
+            <div id="reserve-body-1" class="reserve-body"></div>
+
+            <button class="reserve-toggle" id="toggle-r2" type="button" data-reserve="2">
+              <span class="reserve-toggle-icon">+</span>
+              <span>
+                <span class="reserve-toggle-text">Adicionar reserva 2</span>
+                <span class="reserve-toggle-sub">Inclua um segundo reserva</span>
+              </span>
+            </button>
+            <div id="reserve-body-2" class="reserve-body"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">05</div>
+            <div class="card-title">Confirmar inscrição</div>
+          </div>
+          <div class="card-body">
+            <div class="submit-area">
+              <button type="submit" class="submit-btn" id="submit-btn">Enviar inscrição</button>
+              <div class="submit-note">Ao enviar você confirma que leu e aceita o regulamento. A confirmação será enviada ao email do capitão.</div>
+            </div>
+          </div>
+        </section>
+      </form>
+    </main>
+
+    <footer class="footer">
+      <span>&lt;/&gt;</span> DEVS CONECTADOS - VALORANT CHAMPIONSHIP - 2026 <span>&lt;/&gt;</span>
+    </footer>
+  </div>
+
+  <script src="src/js/app.js" defer></script>
+</body>
+
+</html>

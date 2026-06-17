@@ -4,238 +4,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inscrição — Evento Minecraft · Devs Conectados</title>
+  <title>Devs Conectados - Eventos da Comunidade</title>
   <link rel="icon" href="icon/icon.jpeg" type="image/jpeg">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cinzel:wght@700;900&display=swap"
-    rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/css/style.css">
 </head>
 
-<body>
-
+<body class="page-home">
   <div class="dots-tl"></div>
   <div class="dots-tr"></div>
   <div class="dots-bl"></div>
   <div class="dots-br"></div>
 
-  <!-- SUCCESS -->
-  <div id="success-screen">
-    <div class="success-box">
-      <div class="success-icon">🏆</div>
-      <div class="success-title">INSCRIÇÃO ENVIADA!</div>
-      <div class="success-team" id="success-team-name"></div>
-      <div class="success-sub">Sua inscrição foi registrada com sucesso!<br>Um email de confirmação foi enviado ao
-        participante(s).<br><br>Aguarde a confirmação da organização no Discord ou WhatsApp.</div>
-      <button class="success-close" onclick="closeSuccess()">✓ FECHAR</button>
-    </div>
-  </div>
+  <div class="site-shell">
+    <header class="top-nav">
+      <a class="brand-link" href="index.html" aria-label="Devs Conectados">
+        <img src="icon/icon.jpeg" alt="">
+        <span>&lt;/&gt; Devs Conectados</span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a class="active" href="index.html">Home</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="#eventos-anteriores">Eventos anteriores</a>
+      </nav>
+    </header>
 
-  <div class="wrapper">
+    <main>
+      <section class="home-hero" aria-labelledby="home-title">
+        <div class="hero-copy">
+          <p class="eyebrow">&lt;/&gt; comunidade dev + competitivo</p>
+          <h1 id="home-title">Eventos Devs Conectados</h1>
+          <p class="hero-lead">
+            Uma arena criada pela comunidade para transformar código, amizade e jogo em experiências memoráveis.
+            Cada evento nasce para aproximar pessoas, revelar talentos e manter viva a cultura gamer entre devs.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="inscricao.html">Inscrever equipe</a>
+            <a class="btn secondary" href="#eventos-anteriores">Ver histórico</a>
+          </div>
+        </div>
 
-    <!-- SETUP BANNER -->
-    <div class="setup-banner hidden" id="setup-banner">
-      <div class="setup-banner-header" id="setup-header" onclick="toggleSetup()">
-        <span>⚙ CONFIGURAÇÃO EMAILJS — LEIA ANTES DE USAR</span>
-        <span class="toggle" id="setup-toggle">▼</span>
+        <div class="hero-signal" aria-label="Próximo evento">
+          <div class="hero-mark">
+            <img src="icon/icon.jpeg" alt="">
+          </div>
+          <div class="signal-line">Próxima operação</div>
+          <strong>Valorant Championship</strong>
+          <span>20 de junho de 2026 - 19:00</span>
+        </div>
+      </section>
+
+      <div class="event-strip" aria-label="Resumo da comunidade">
+        <div class="event-chip"><span class="dot"></span>Eventos da comunidade</div>
+        <div class="event-chip"><span class="dot"></span>Minecraft foi o primeiro palco</div>
+        <div class="event-chip red-chip"><span class="dot"></span>Valorant abre a nova fase</div>
       </div>
-      <div class="setup-banner-body" id="setup-body">
-        <div class="setup-step">
-          <div class="step-num">1</div>
-          <div class="step-text">Acesse <a href="https://www.emailjs.com" target="_blank">emailjs.com</a> e crie uma
-            conta gratuita.</div>
-        </div>
-        <div class="setup-step">
-          <div class="step-num">2</div>
-          <div class="step-text">Em <strong>Email Services</strong>, clique em <strong>Add New Service</strong>, escolha
-            Gmail, conecte sua conta e copie o <strong>Service ID</strong>.</div>
-        </div>
-        <div class="setup-step">
-          <div class="step-num">3</div>
-          <div class="step-text">
-            Em <strong>Email Templates</strong>, clique em <strong>Create New Template</strong>. Configure:<br>
-            <code>To:</code> <code>{{to_email}}</code><br>
-            <code>Subject:</code> <code>Inscrição confirmada — {{team_label}} · Devs Conectados</code><br>
-            No corpo, selecione o modo <strong>HTML</strong> e use variáveis como <code>{{member_name}}</code>,
-            <code>{{registration_type}}</code> e <code>{{team_label}}</code>.<br>
-            Salve e copie o <strong>Template ID</strong>.
-          </div>
-        </div>
-        <div class="setup-step">
-          <div class="step-num">4</div>
-          <div class="step-text">Em <strong>Account → API Keys</strong>, copie sua <strong>Public Key</strong>.</div>
-        </div>
-        <div class="setup-step">
-          <div class="step-num">5</div>
-          <div class="step-text">Cole os três valores abaixo e clique em <strong>Salvar e Ativar</strong>.</div>
-        </div>
-        <div class="config-row">
-          <div class="config-field">
-            <label>Public Key</label>
-            <input type="text" id="cfg-pubkey" placeholder="user_XXXXXXXXXXXXXXX">
-          </div>
-          <div class="config-field">
-            <label>Service ID</label>
-            <input type="text" id="cfg-service" placeholder="service_XXXXXXX">
-          </div>
-          <div class="config-field">
-            <label>Template ID</label>
-            <input type="text" id="cfg-template" placeholder="template_XXXXXXX">
-          </div>
-          <button class="save-config-btn" onclick="saveConfig()">✓ Salvar e Ativar</button>
-        </div>
-        <div id="config-status" class="config-status"></div>
-      </div>
-    </div>
 
-    <!-- HEADER -->
-    <div class="header">
-      <div class="header-tag">&lt;/&gt; DEVS CONECTADOS</div>
-      <div class="header-logo">&lt;/&gt;</div>
-      <div class="header-title">Inscrição do Evento</div>
-      <div class="header-sub">1º Campeonato Gamer · 05 de junho de 2026</div>
-      <div class="header-divider"></div>
-    </div>
-
-    <div class="event-strip">
-      <div class="event-chip"><span class="dot"></span>05 DE JUNHO DE 2026</div>
-      <div class="event-chip"><span class="dot"></span>MINECRAFT JAVA EDITION</div>
-      <div class="event-chip"><span class="dot"></span>EQUIPES DE 3 JOGADORES</div>
-      <div class="event-chip"><span class="dot"></span>BEDWARS + SKYWARS</div>
-    </div>
-
-    <a class="reg-banner" href="docs/Regulamento_Devs_Conectados.pdf" target="_blank">
-      <span class="reg-banner-icon">📋</span>
-      <div class="reg-banner-text">
-        <div class="reg-banner-title">REGULAMENTO OFICIAL DO EVENTO</div>
-        <div class="reg-banner-sub">Leia o regulamento completo antes de se inscrever — clique para abrir o PDF</div>
-      </div>
-      <span class="reg-banner-arrow">↗</span>
-    </a>
-
-    <form id="form" novalidate>
-
-      <!-- EQUIPE -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">01</div>
-          <div class="card-title">Inscrição e equipe</div>
+      <section class="content-section" aria-labelledby="concept-title">
+        <div class="section-heading">
+          <p class="eyebrow">conceito</p>
+          <h2 id="concept-title">Do código ao clutch</h2>
         </div>
-        <div class="card-body">
-          <div class="field" id="f-team-size">
-            <label>Tipo de inscrição</label>
-            <div class="mode-grid">
-              <div class="mode-card sel" id="mc-size-3" onclick="setTeamSize(3)">
-                <input type="radio" name="team-size" checked>
-                <div>
-                  <div class="mode-name">Trio</div>
-                  <div class="mode-sub">3 jogadores</div>
-                </div>
-              </div>
-              <div class="mode-card" id="mc-size-2" onclick="setTeamSize(2)">
-                <input type="radio" name="team-size">
-                <div>
-                  <div class="mode-name">Dupla</div>
-                  <div class="mode-sub">2 jogadores + uma vaga em espera</div>
-                </div>
-              </div>
-              <div class="mode-card" id="mc-size-1" onclick="setTeamSize(1)">
-                <input type="radio" name="team-size">
-                <div>
-                  <div class="mode-name">Individual</div>
-                  <div class="mode-sub">Sem nome de equipe</div>
-                </div>
-              </div>
+        <div class="concept-grid">
+          <article class="info-card">
+            <span class="card-kicker">01</span>
+            <h3>Comunidade primeiro</h3>
+            <p>Os eventos existem para reunir devs, estudantes e amigos em um ambiente competitivo, leve e organizado.</p>
+          </article>
+          <article class="info-card">
+            <span class="card-kicker">02</span>
+            <h3>Competição com identidade</h3>
+            <p>Cada campeonato recebe uma estética própria, regras claras e uma experiência pensada para a comunidade.</p>
+          </article>
+          <article class="info-card">
+            <span class="card-kicker">03</span>
+            <h3>História em construção</h3>
+            <p>Os destaques, equipes e momentos marcantes ficam registrados para valorizar quem participa desde o começo.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section" id="eventos-anteriores" aria-labelledby="previous-title">
+        <div class="section-heading">
+          <p class="eyebrow">arquivo</p>
+          <h2 id="previous-title">Eventos anteriores</h2>
+        </div>
+
+        <div class="history-grid">
+          <article class="event-card minecraft-card">
+            <div class="event-card-top">
+              <span>Evento 01</span>
+              <strong>Finalizado</strong>
             </div>
-            <div class="field-note" id="team-size-note">Como dupla, se faltar 1 jogador um solo pode completar; caso
-              contrário, a dupla entra em lista de espera.</div>
-          </div>
-          <div class="field" id="f-team">
-            <label>Nome da equipe</label>
-            <input type="text" id="team-name" placeholder="Ex: Team Phoenix" maxlength="40" autocomplete="off">
-            <span class="err-msg">Informe o nome da equipe</span>
-          </div>
-        </div>
-      </div>
+            <h3>Minecraft Championship</h3>
+            <p>Primeiro campeonato gamer da Devs Conectados, com partidas de Minecraft Java Edition em BedWars e SkyWars.</p>
+            <dl class="event-facts">
+              <div>
+                <dt>Formato</dt>
+                <dd>Individual, dupla ou trio</dd>
+              </div>
+              <div>
+                <dt>Modos</dt>
+                <dd>BedWars + SkyWars</dd>
+              </div>
+              <div>
+                <dt>Ano</dt>
+                <dd>2026</dd>
+              </div>
+            </dl>
+          </article>
 
-      <!-- MODOS -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">02</div>
-          <div class="card-title">Modo(s) de Jogo</div>
-        </div>
-        <div class="card-body">
-          <div class="field" id="f-modes">
-            <label>Selecione os modos de participação</label>
-            <div class="mode-grid">
-              <div class="mode-card sel" id="mc-bw" onclick="toggleMode('bw')">
-                <input type="checkbox" id="mode-bw" checked>
-                <div class="mode-icon">🛏</div>
-                <div>
-                  <div class="mode-name">BedWars</div>
-                  <div class="mode-sub">Destrua as camas inimigas</div>
-                </div>
-              </div>
-              <div class="mode-card sel" id="mc-hg" onclick="toggleMode('hg')">
-                <input type="checkbox" id="mode-hg" checked>
-                <div class="mode-icon">⚔</div>
-                <div>
-                  <div class="mode-name">SkyWars</div>
-                  <div class="mode-sub">Conquiste ilhas no céu</div>
-                </div>
-              </div>
+          <article class="mvp-card">
+            <div class="mvp-label">Jogador de destaque</div>
+            <div class="mvp-avatar">
+              <img src="icon/icon.jpeg" alt="">
             </div>
-            <span class="err-msg" id="modes-err" style="display:none">Selecione pelo menos um modo</span>
-          </div>
+            <div class="mvp-name">NZ</div>
+            <p>MVP do primeiro evento da comunidade, marcando o início do histórico competitivo da Devs Conectados.</p>
+          </article>
         </div>
-      </div>
+      </section>
 
-      <!-- MEMBERS -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">03</div>
-          <div class="card-title">Membro 1</div>
+      <section class="next-event" aria-labelledby="next-title">
+        <div>
+          <p class="eyebrow red-text">inscrições abertas</p>
+          <h2 id="next-title">Valorant Championship</h2>
+          <p>Monte sua equipe 5x5, escolha até dois reservas e entre na próxima disputa oficial da comunidade.</p>
         </div>
-        <div class="card-body" id="body-m1"></div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">04</div>
-          <div class="card-title">Membro 2</div>
-        </div>
-        <div class="card-body" id="body-m2"></div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">05</div>
-          <div class="card-title">Membro 3</div>
-        </div>
-        <div class="card-body" id="body-m3"></div>
-      </div>
+        <a class="btn primary red-btn" href="inscricao.html">Abrir formulário</a>
+      </section>
+    </main>
 
-      <!-- SUBMIT -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">06</div>
-          <div class="card-title">Confirmar Inscrição</div>
-        </div>
-        <div class="card-body">
-          <div class="submit-area">
-            <button type="submit" class="submit-btn" id="submit-btn">⚡ ENVIAR INSCRIÇÃO</button>
-            <div class="submit-note">Ao enviar você confirma que leu e aceita o regulamento · Um email de confirmação
-              será enviado a cada membro</div>
-          </div>
-        </div>
-      </div>
-
-    </form>
-
-    <div class="footer"><span>&lt;/&gt;</span> DEVS CONECTADOS · 1º CAMPEONATO GAMER · 2026 <span>&lt;/&gt;</span></div>
+    <footer class="footer">
+      <span>&lt;/&gt;</span> DEVS CONECTADOS - EVENTOS DA COMUNIDADE - 2026 <span>&lt;/&gt;</span>
+    </footer>
   </div>
-
-    <script src="src/js/app.js" defer></script>
-
 </body>
 
 </html>

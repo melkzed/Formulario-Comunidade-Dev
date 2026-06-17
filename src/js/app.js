@@ -5,10 +5,18 @@ var EJS = {
 };
 
 var emailJsReady = false;
-var currentTeamSize = 3;
+var reserveActive = { 1: false, 2: false };
+
+var RANKS = ["Ferro", "Bronze", "Prata", "Ouro", "Platina", "Diamante", "Ascendente", "Imortal", "Radiante"];
 
 function isAdminMode() {
   return window.location.search.indexOf('admin=1') !== -1;
+}
+
+function rankOptionsHtml() {
+  var opts = '<option value="">Selecione o rank</option>';
+  RANKS.forEach(function (r) { opts += '<option>' + r + '</option>'; });
+  return opts;
 }
 
 function loadConfig() {
@@ -20,55 +28,28 @@ function loadConfig() {
   if (storedService) EJS.service = storedService;
   if (storedTemplate) EJS.template = storedTemplate;
 
-  if (EJS.pubkey) document.getElementById('cfg-pubkey').value = EJS.pubkey;
-  if (EJS.service) document.getElementById('cfg-service').value = EJS.service;
-  if (EJS.template) document.getElementById('cfg-template').value = EJS.template;
+  var pub = document.getElementById('cfg-pubkey');
+  var srv = document.getElementById('cfg-service');
+  var tpl = document.getElementById('cfg-template');
+  if (pub) pub.value = EJS.pubkey || '';
+  if (srv) srv.value = EJS.service || '';
+  if (tpl) tpl.value = EJS.template || '';
 
   var adminMode = isAdminMode();
   if (EJS.pubkey && EJS.service && EJS.template) {
     emailjs.init({ publicKey: EJS.pubkey });
     emailJsReady = true;
     setConfigStatus('✓ EmailJS configurado e ativo', 'ok');
-    document.getElementById('setup-body').classList.remove('open');
-    document.getElementById('setup-header').classList.remove('open');
+    var sBody = document.getElementById('setup-body');
+    var sHead = document.getElementById('setup-header');
+    if (sBody) sBody.classList.remove('open');
+    if (sHead) sHead.classList.remove('open');
   }
 
   if (adminMode) {
-    document.getElementById('setup-banner').classList.remove('hidden');
+    var banner = document.getElementById('setup-banner');
+    if (banner) banner.classList.remove('hidden');
   }
-}
-
-function setTeamSize(size) {
-  currentTeamSize = size;
-  ['mc-size-1', 'mc-size-2', 'mc-size-3'].forEach(function (id) {
-    document.getElementById(id).className = 'mode-card' + (id === 'mc-size-' + size ? ' sel' : '');
-  });
-  updateTeamFields();
-}
-
-function updateTeamFields() {
-  var teamLabel = document.querySelector('#f-team label');
-  var teamInput = document.getElementById('team-name');
-  var note = document.getElementById('team-size-note');
-
-  if (currentTeamSize === 1) {
-    teamInput.placeholder = 'Sem nome de equipe';
-    note.textContent = 'Inscrição individual: você entra sem nome de equipe e pode ser realocado para completar uma dupla.';
-    document.getElementById('f-team').style.display = 'none';
-    document.getElementById('f-team').classList.remove('has-error');
-    teamInput.classList.remove('error');
-  } else if (currentTeamSize === 2) {
-    teamInput.placeholder = 'Ex: Duo Phoenix';
-    note.textContent = 'Dupla: se faltar 1 jogador um solo pode completar. Caso contrário, a dupla entra em lista de espera.';
-    document.getElementById('f-team').style.display = '';
-  } else {
-    teamInput.placeholder = 'Ex: Team Phoenix';
-    note.textContent = 'Equipe completa de 3 jogadores.';
-    document.getElementById('f-team').style.display = '';
-  }
-
-  document.getElementById('body-m2').parentElement.style.display = currentTeamSize >= 2 ? '' : 'none';
-  document.getElementById('body-m3').parentElement.style.display = currentTeamSize >= 3 ? '' : 'none';
 }
 
 function saveConfig() {
@@ -95,6 +76,7 @@ function saveConfig() {
 
 function setConfigStatus(msg, type) {
   var el = document.getElementById('config-status');
+  if (!el) return;
   el.textContent = msg;
   el.className = 'config-status ' + type;
 }
@@ -107,41 +89,77 @@ function toggleSetup() {
   header.classList.toggle('open', !isOpen);
 }
 
-function buildMember(num) {
-  var body = document.getElementById('body-m' + num);
-  body.innerHTML =
-    '<div class="field-row">' +
-    '<div class="field" id="f-m' + num + '-name"><label>Nome Completo</label>' +
-    '<input type="text" id="m' + num + '-name" placeholder="Nome real" maxlength="60" autocomplete="off">' +
-    '<span class="err-msg">Informe o nome</span></div>' +
-    '<div class="field" id="f-m' + num + '-nick"><label>Nick do Minecraft</label>' +
-    '<input type="text" id="m' + num + '-nick" placeholder="NickExato123" maxlength="32" autocomplete="off">' +
-    '<span class="err-msg">Informe o nick</span></div>' +
-    '</div>' +
-    '<div class="field-row">' +
-    '<div class="field" id="f-m' + num + '-email"><label>Email</label>' +
-    '<input type="email" id="m' + num + '-email" placeholder="jogador@email.com" maxlength="80" autocomplete="off">' +
-    '<span class="err-msg">Informe um email válido</span></div>' +
-    '<div class="field" id="f-m' + num + '-phone"><label>Celular</label>' +
-    '<input type="tel" id="m' + num + '-phone" placeholder="(11) 99999-9999" maxlength="16" autocomplete="off">' +
-    '<span class="err-msg">Informe o celular</span></div>' +
-    '</div>';
-
-  var ph = document.getElementById('m' + num + '-phone');
-  ph.addEventListener('input', function () {
-    var v = ph.value.replace(/\D/g, '');
+function attachPhoneMask(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', function () {
+    var v = el.value.replace(/\D/g, '');
     if (v.length <= 2) v = '(' + v;
     else if (v.length <= 7) v = '(' + v.slice(0, 2) + ') ' + v.slice(2);
     else if (v.length <= 11) v = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7);
     else v = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7, 11);
-    ph.value = v;
+    el.value = v;
   });
 }
 
-function toggleMode(m) {
-  var cb = document.getElementById('mode-' + m);
-  cb.checked = !cb.checked;
-  document.getElementById('mc-' + m).className = 'mode-card' + (cb.checked ? ' sel' : '');
+function buildTitular(num) {
+  var body = document.getElementById('titulares-body');
+  if (!body) return;
+  var block = document.createElement('div');
+  block.className = 'member-block';
+  block.innerHTML =
+    '<div class="member-block-title">&gt; Titular ' + num + ' <span class="role-tag">EQUIPE</span></div>' +
+    '<div class="field-row">' +
+    '<div class="field" id="f-t' + num + '-name"><label>Nome Completo</label>' +
+    '<input type="text" id="t' + num + '-name" placeholder="Nome real" maxlength="60" autocomplete="off">' +
+    '<span class="err-msg">Informe o nome</span></div>' +
+    '<div class="field" id="f-t' + num + '-tag"><label>Nick e Tag do Valorant</label>' +
+    '<input type="text" id="t' + num + '-tag" placeholder="Jogador#BR1" maxlength="32" autocomplete="off">' +
+    '<span class="err-msg">Informe nick e tag</span></div>' +
+    '</div>' +
+    '<div class="field-row">' +
+    '<div class="field" id="f-t' + num + '-rank"><label>Rank Atual</label>' +
+    '<select id="t' + num + '-rank">' + rankOptionsHtml() + '</select>' +
+    '<span class="err-msg">Selecione o rank</span></div>' +
+    '</div>';
+  body.appendChild(block);
+}
+
+function toggleReserve(num) {
+  var toggle = document.getElementById('toggle-r' + num);
+  var bodyDiv = document.getElementById('reserve-body-' + num);
+  if (!toggle || !bodyDiv) return;
+
+  reserveActive[num] = !reserveActive[num];
+
+  if (reserveActive[num]) {
+    toggle.classList.add('active');
+    toggle.querySelector('.reserve-toggle-icon').textContent = '−';
+    toggle.querySelector('.reserve-toggle-text').textContent = 'Remover reserva ' + num;
+    toggle.querySelector('.reserve-toggle-sub').textContent = 'Clique para remover este reserva';
+    bodyDiv.style.display = 'block';
+    bodyDiv.innerHTML =
+      '<div class="member-block reserve">' +
+      '<div class="member-block-title">&gt; Reserva ' + num + ' <span class="role-tag">RESERVA</span></div>' +
+      '<div class="field-row">' +
+      '<div class="field" id="f-r' + num + '-name"><label>Nome Completo</label>' +
+      '<input type="text" id="r' + num + '-name" placeholder="Nome real" maxlength="60" autocomplete="off"></div>' +
+      '<div class="field" id="f-r' + num + '-tag"><label>Nick e Tag do Valorant</label>' +
+      '<input type="text" id="r' + num + '-tag" placeholder="Jogador#BR1" maxlength="32" autocomplete="off"></div>' +
+      '</div>' +
+      '<div class="field-row">' +
+      '<div class="field" id="f-r' + num + '-rank"><label>Rank Atual</label>' +
+      '<select id="r' + num + '-rank">' + rankOptionsHtml() + '</select></div>' +
+      '</div>' +
+      '</div>';
+  } else {
+    toggle.classList.remove('active');
+    toggle.querySelector('.reserve-toggle-icon').textContent = '+';
+    toggle.querySelector('.reserve-toggle-text').textContent = 'Adicionar reserva ' + num;
+    toggle.querySelector('.reserve-toggle-sub').textContent = num === 1 ? 'Inclua um jogador reserva' : 'Inclua um segundo reserva';
+    bodyDiv.style.display = 'none';
+    bodyDiv.innerHTML = '';
+  }
 }
 
 function reqField(id, fid) {
@@ -160,106 +178,126 @@ function emailField(id, fid) {
   return ok;
 }
 
-function phoneField(num) {
-  var v = document.getElementById('m' + num + '-phone').value.replace(/\D/g, '');
-  var ok = v.length >= 10;
-  document.getElementById('f-m' + num + '-phone').classList.toggle('has-error', !ok);
-  document.getElementById('m' + num + '-phone').classList.toggle('error', !ok);
+function tagField(id, fid) {
+  var v = document.getElementById(id).value.trim();
+  var ok = /^.+#.+$/.test(v);
+  document.getElementById(fid).classList.toggle('has-error', !ok);
+  document.getElementById(id).classList.toggle('error', !ok);
   return ok;
 }
 
-function sendConfirmation(member, teamName, teamLabel, registrationType, modesStr) {
-  if (!emailJsReady) {
-    return Promise.resolve({ skipped: true, noConfig: true });
-  }
+function phoneField(id, fid) {
+  var v = document.getElementById(id).value.replace(/\D/g, '');
+  var ok = v.length >= 10;
+  document.getElementById(fid).classList.toggle('has-error', !ok);
+  document.getElementById(id).classList.toggle('error', !ok);
+  return ok;
+}
 
-  return emailjs.send(EJS.service, EJS.template, {
-    to_email: member.email,
-    to_name: member.name,
-    member_name: member.name,
-    member_nick: member.nick,
-    team_name: teamName,
-    team_label: teamLabel,
-    registration_type: registrationType,
-    modes: modesStr,
-    event_date: '30 de Maio de 2026',
-    event_name: '1º Campeonato Gamer Devs Conectados'
-  }).then(function (res) {
-    console.log('EmailJS: sucesso ->', member.email, res);
+function sendConfirmation(data) {
+  if (!emailJsReady) return Promise.resolve({ skipped: true, noConfig: true });
+  return emailjs.send(EJS.service, EJS.template, data).then(function (res) {
+    console.log('EmailJS: sucesso ->', data.to_email, res);
     return res;
   }).catch(function (err) {
-    console.error('EmailJS: erro ->', member.email, err);
+    console.error('EmailJS: erro ->', data.to_email, err);
     throw err;
   });
 }
 
 function showSuccessScreen(message) {
   document.getElementById('success-team-name').textContent = message.teamLabel;
-  document.getElementById('success-screen').classList.add('show');
   document.getElementById('success-sub').textContent = message.body;
+  document.getElementById('success-screen').classList.add('show');
 }
 
 function closeSuccess() {
   document.getElementById('success-screen').classList.remove('show');
 }
 
-function buildAdminEmail(members, registrationType, teamLabel, modesStr) {
-  var adminLines = [
-    'INSCRIÇÃO — 1º CAMPEONATO GAMER DEVS CONECTADOS',
-    'Data: 30 de Maio de 2026',
+function buildAdminEmail(teamName, captain, titulares, reservas) {
+  var lines = [
+    'INSCRIÇÃO — VALORANT CHAMPIONSHIP DEVS CONECTADOS',
+    'Data: 20 de junho de 2026 — 19:00',
     '',
-    'Tipo de inscrição: ' + registrationType,
-    'EQUIPE: ' + teamLabel,
-    'MODOS: ' + modesStr,
+    'EQUIPE: ' + teamName,
+    '',
+    '── CAPITÃO ──',
+    'Nome:  ' + captain.name,
+    'Tag:   ' + captain.tag,
+    'Rank:  ' + captain.rank,
+    'Tel:   ' + captain.phone,
+    'Email: ' + captain.email,
     ''
   ];
 
-  members.forEach(function (m, idx) {
-    adminLines.push('── MEMBRO ' + (idx + 1) + ' ──');
-    adminLines.push('Nome:    ' + m.name);
-    adminLines.push('Nick:    ' + m.nick);
-    adminLines.push('Email:   ' + m.email);
-    adminLines.push('Celular: ' + m.phone);
-    adminLines.push('');
+  titulares.forEach(function (t, idx) {
+    lines.push('── TITULAR ' + (idx + 2) + ' ──');
+    lines.push('Nome: ' + t.name);
+    lines.push('Tag:  ' + t.tag);
+    lines.push('Rank: ' + t.rank);
+    lines.push('');
   });
 
-  adminLines.push('Enviado via formulário de inscrição.');
-  var adminSubject = encodeURIComponent('[INSCRIÇÃO] ' + registrationType + ' — ' + teamLabel + ' — Campeonato Devs Conectados');
-  var adminBody = encodeURIComponent(adminLines.join('\n'));
-  return 'mailto:melkzedektech@gmail.com?subject=' + adminSubject + '&body=' + adminBody;
+  reservas.forEach(function (r, idx) {
+    lines.push('── RESERVA ' + (idx + 1) + ' ──');
+    lines.push('Nome: ' + r.name);
+    lines.push('Tag:  ' + r.tag);
+    lines.push('Rank: ' + r.rank);
+    lines.push('');
+  });
+
+  lines.push('Enviado via formulário de inscrição Valorant.');
+
+  var subject = encodeURIComponent('[INSCRIÇÃO VALORANT] ' + teamName + ' — Devs Conectados');
+  var body = encodeURIComponent(lines.join('\n'));
+  return 'mailto:melkzedektech@gmail.com?subject=' + subject + '&body=' + body;
 }
 
 function initForm() {
-  buildMember(1);
-  buildMember(2);
-  buildMember(3);
-  updateTeamFields();
+  var form = document.getElementById('valorant-form');
+  if (!form) return;
+
+  var capRankSelect = document.getElementById('cap-rank');
+  if (capRankSelect) capRankSelect.innerHTML = rankOptionsHtml();
+
+  for (var i = 2; i <= 5; i++) buildTitular(i);
+  attachPhoneMask('cap-phone');
   loadConfig();
 
-  document.getElementById('form').addEventListener('submit', function (e) {
+  var t1 = document.getElementById('toggle-r1');
+  var t2 = document.getElementById('toggle-r2');
+  if (t1) t1.addEventListener('click', function () { toggleReserve(1); });
+  if (t2) t2.addEventListener('click', function () { toggleReserve(2); });
+
+  var saveBtn = document.getElementById('save-config');
+  if (saveBtn) saveBtn.addEventListener('click', saveConfig);
+  var setupHeader = document.getElementById('setup-header');
+  if (setupHeader) setupHeader.addEventListener('click', toggleSetup);
+  var successClose = document.getElementById('success-close');
+  if (successClose) successClose.addEventListener('click', closeSuccess);
+
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
-
     var ok = true;
-    if (currentTeamSize > 1) {
-      ok = reqField('team-name', 'f-team') && ok;
-    }
 
-    var bwOn = document.getElementById('mode-bw').checked;
-    var hgOn = document.getElementById('mode-hg').checked;
-    var modesErr = document.getElementById('modes-err');
+    ok = reqField('team-name', 'f-team') && ok;
+    ok = reqField('cap-name', 'f-cap-name') && ok;
+    ok = tagField('cap-tag', 'f-cap-tag') && ok;
+    ok = reqField('cap-rank', 'f-cap-rank') && ok;
+    ok = phoneField('cap-phone', 'f-cap-phone') && ok;
+    ok = emailField('cap-email', 'f-cap-email') && ok;
 
-    if (!bwOn && !hgOn) {
-      modesErr.style.display = 'block';
-      ok = false;
-    } else {
-      modesErr.style.display = 'none';
-    }
-
-    for (var i = 1; i <= currentTeamSize; i++) {
-      ok = reqField('m' + i + '-name', 'f-m' + i + '-name') && ok;
-      ok = reqField('m' + i + '-nick', 'f-m' + i + '-nick') && ok;
-      ok = emailField('m' + i + '-email', 'f-m' + i + '-email') && ok;
-      ok = phoneField(i) && ok;
+    var titulares = [];
+    for (var i = 2; i <= 5; i++) {
+      ok = reqField('t' + i + '-name', 'f-t' + i + '-name') && ok;
+      ok = tagField('t' + i + '-tag', 'f-t' + i + '-tag') && ok;
+      ok = reqField('t' + i + '-rank', 'f-t' + i + '-rank') && ok;
+      titulares.push({
+        name: document.getElementById('t' + i + '-name').value.trim(),
+        tag: document.getElementById('t' + i + '-tag').value.trim(),
+        rank: document.getElementById('t' + i + '-rank').value
+      });
     }
 
     if (!ok) {
@@ -270,67 +308,68 @@ function initForm() {
 
     var btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.textContent = '⏳ Enviando...';
+    btn.textContent = 'Enviando...';
 
     var teamName = document.getElementById('team-name').value.trim();
-    var registrationType = currentTeamSize === 1 ? 'Individual' : currentTeamSize === 2 ? 'Dupla' : 'Equipe de 3';
-    var teamLabel = currentTeamSize === 1 ? 'Sem equipe' : (teamName || 'Sem nome de equipe');
-    var modes = [];
-    if (bwOn) modes.push('BedWars');
-    if (hgOn) modes.push('SkyWars');
-    var modesStr = modes.join(' + ');
+    var captain = {
+      name: document.getElementById('cap-name').value.trim(),
+      tag: document.getElementById('cap-tag').value.trim(),
+      rank: document.getElementById('cap-rank').value,
+      phone: document.getElementById('cap-phone').value.trim(),
+      email: document.getElementById('cap-email').value.trim()
+    };
 
-    var members = [];
-    for (var j = 1; j <= currentTeamSize; j++) {
-      members.push({
-        name: document.getElementById('m' + j + '-name').value.trim(),
-        nick: document.getElementById('m' + j + '-nick').value.trim(),
-        email: document.getElementById('m' + j + '-email').value.trim(),
-        phone: document.getElementById('m' + j + '-phone').value.trim()
-      });
+    var reservas = [];
+    for (var r = 1; r <= 2; r++) {
+      if (reserveActive[r]) {
+        var rn = document.getElementById('r' + r + '-name');
+        var rt = document.getElementById('r' + r + '-tag');
+        var rr = document.getElementById('r' + r + '-rank');
+        if (rn && rn.value.trim()) {
+          reservas.push({ name: rn.value.trim(), tag: rt.value.trim(), rank: rr.value });
+        }
+      }
     }
 
-    window.open(buildAdminEmail(members, registrationType, teamLabel, modesStr));
+    window.open(buildAdminEmail(teamName, captain, titulares, reservas));
 
-    var promises = [];
+    var promise = Promise.resolve({ skipped: true });
     if (emailJsReady) {
-      btn.textContent = '⏳ Enviando confirmações...';
-      members.forEach(function (member) {
-        promises.push(sendConfirmation(member, teamName, teamLabel, registrationType, modesStr));
+      btn.textContent = 'Enviando confirmação...';
+      promise = sendConfirmation({
+        to_name: captain.name,
+        to_email: captain.email,
+        member_name: captain.name,
+        team_name: teamName,
+        team_label: teamName,
+        modes: 'Valorant 5x5',
+        registration_type: 'Equipe 5x5',
+        event_date: '20 de junho de 2026',
+        event_name: 'Valorant Championship Devs Conectados'
       });
     }
 
-    Promise.allSettled(promises).then(function (results) {
+    promise.then(function () {
       btn.disabled = false;
-      btn.textContent = '⚡ ENVIAR INSCRIÇÃO';
-
-      var failed = results.filter(function (result) { return result.status !== 'fulfilled'; });
-      if (failed.length > 0) {
-        console.warn('Alguns envios de confirmação falharam:', failed);
+      btn.textContent = 'Enviar inscrição';
+      if (!emailJsReady) {
         showSuccessScreen({
-          teamLabel: '⟨ ' + teamLabel.toUpperCase() + ' ⟩',
-          body: 'Sua inscrição foi registrada, mas houve erro no envio de confirmação para alguns participantes. Verifique o console e o painel do EmailJS.'
-        });
-        alert('Atenção: houve erro ao enviar confirmações para alguns participantes. Verifique o console e o painel do EmailJS.');
-      } else if (!emailJsReady) {
-        showSuccessScreen({
-          teamLabel: '⟨ ' + teamLabel.toUpperCase() + ' ⟩',
+          teamLabel: '⟨ ' + teamName.toUpperCase() + ' ⟩',
           body: 'Sua inscrição foi enviada ao administrador, mas a confirmação por email não pôde ser enviada porque o EmailJS não está configurado. Use ?admin=1 para configurar.'
         });
       } else {
         showSuccessScreen({
-          teamLabel: '⟨ ' + teamLabel.toUpperCase() + ' ⟩',
-          body: 'Sua inscrição foi registrada com sucesso! Um email de confirmação foi enviado a cada participante.'
+          teamLabel: '⟨ ' + teamName.toUpperCase() + ' ⟩',
+          body: 'Sua equipe foi registrada com sucesso! Um email de confirmação foi enviado ao capitão. Aguarde a divulgação das chaves no Discord.'
         });
-        console.log('Todas confirmações enviadas com sucesso.');
       }
     }).catch(function (err) {
-      console.error('Erro inesperado ao processar confirmações:', err);
+      console.error('Erro inesperado ao processar confirmação:', err);
       btn.disabled = false;
-      btn.textContent = '⚡ ENVIAR INSCRIÇÃO';
+      btn.textContent = 'Enviar inscrição';
       showSuccessScreen({
-        teamLabel: '⟨ ' + teamLabel.toUpperCase() + ' ⟩',
-        body: 'Sua inscrição foi registrada, mas ocorreu um erro no envio de confirmações. Veja o console para detalhes.'
+        teamLabel: '⟨ ' + teamName.toUpperCase() + ' ⟩',
+        body: 'Sua inscrição foi registrada, mas houve um erro no envio da confirmação por email. Verifique o console e o painel do EmailJS.'
       });
     });
   });
