@@ -6,6 +6,7 @@ var EJS = {
 
 var emailJsReady = false;
 var reserveActive = { 1: false, 2: false };
+var currentTeamSize = 2; // capitão + 1 (mínimo)
 
 var RANKS = ["Ferro", "Bronze", "Prata", "Ouro", "Platina", "Diamante", "Ascendente", "Imortal", "Radiante"];
 
@@ -107,6 +108,7 @@ function buildTitular(num) {
   if (!body) return;
   var block = document.createElement('div');
   block.className = 'member-block';
+  block.id = 'block-t' + num;
   block.innerHTML =
     '<div class="member-block-title">&gt; Titular ' + num + ' <span class="role-tag">EQUIPE</span></div>' +
     '<div class="field-row">' +
@@ -123,6 +125,37 @@ function buildTitular(num) {
     '<span class="err-msg">Selecione o rank</span></div>' +
     '</div>';
   body.appendChild(block);
+}
+
+function setTeamSize(size) {
+  currentTeamSize = size;
+  [2, 3, 4, 5].forEach(function (s) {
+    var card = document.getElementById('mc-size-' + s);
+    if (card) card.className = 'mode-card' + (s === size ? ' sel' : '');
+  });
+  updateTitularesVisibility();
+}
+
+function updateTitularesVisibility() {
+  // titulares 2..5 ficam visíveis até currentTeamSize
+  for (var i = 2; i <= 5; i++) {
+    var block = document.getElementById('block-t' + i);
+    if (!block) continue;
+    block.style.display = (i <= currentTeamSize) ? '' : 'none';
+  }
+
+  var sub = document.getElementById('titulares-sub');
+  if (sub) {
+    var extra = currentTeamSize - 1;
+    sub.textContent = extra === 1
+      ? '1 jogador além do capitão'
+      : extra + ' jogadores além do capitão';
+  }
+
+  var warning = document.getElementById('size-warning');
+  if (warning) {
+    warning.classList.toggle('full-team', currentTeamSize === 5);
+  }
 }
 
 function toggleReserve(num) {
@@ -215,12 +248,13 @@ function closeSuccess() {
   document.getElementById('success-screen').classList.remove('show');
 }
 
-function buildAdminEmail(teamName, captain, titulares, reservas) {
+function buildAdminEmail(teamName, captain, titulares, reservas, teamSize) {
   var lines = [
     'INSCRIÇÃO — VALORANT CHAMPIONSHIP DEVS CONECTADOS',
-    'Data: 20 de junho de 2026 — 19:00',
+    'Data: 20 de junho de 2026 — 20:00',
     '',
     'EQUIPE: ' + teamName,
+    'TAMANHO INFORMADO: ' + teamSize + ' jogador(es) titular(es)' + (teamSize < 5 ? ' — INCOMPLETA, sujeita a remontagem pela organização' : ' — completa'),
     '',
     '── CAPITÃO ──',
     'Nome:  ' + captain.name,
@@ -249,7 +283,7 @@ function buildAdminEmail(teamName, captain, titulares, reservas) {
 
   lines.push('Enviado via formulário de inscrição Valorant.');
 
-  var subject = encodeURIComponent('[INSCRIÇÃO VALORANT] ' + teamName + ' — Devs Conectados');
+  var subject = encodeURIComponent('[INSCRIÇÃO VALORANT] ' + teamName + ' (' + teamSize + 'x) — Devs Conectados');
   var body = encodeURIComponent(lines.join('\n'));
   return 'mailto:melkzedektech@gmail.com?subject=' + subject + '&body=' + body;
 }
@@ -262,8 +296,17 @@ function initForm() {
   if (capRankSelect) capRankSelect.innerHTML = rankOptionsHtml();
 
   for (var i = 2; i <= 5; i++) buildTitular(i);
+  setTeamSize(2);
   attachPhoneMask('cap-phone');
   loadConfig();
+
+  [2, 3, 4, 5].forEach(function (s) {
+    var card = document.getElementById('mc-size-' + s);
+    if (card) card.addEventListener('click', function () {
+      var size = parseInt(this.getAttribute('data-size'), 10);
+      setTeamSize(size);
+    });
+  });
 
   var t1 = document.getElementById('toggle-r1');
   var t2 = document.getElementById('toggle-r2');
@@ -289,7 +332,7 @@ function initForm() {
     ok = emailField('cap-email', 'f-cap-email') && ok;
 
     var titulares = [];
-    for (var i = 2; i <= 5; i++) {
+    for (var i = 2; i <= currentTeamSize; i++) {
       ok = reqField('t' + i + '-name', 'f-t' + i + '-name') && ok;
       ok = tagField('t' + i + '-tag', 'f-t' + i + '-tag') && ok;
       ok = reqField('t' + i + '-rank', 'f-t' + i + '-rank') && ok;
@@ -331,7 +374,7 @@ function initForm() {
       }
     }
 
-    window.open(buildAdminEmail(teamName, captain, titulares, reservas));
+    window.open(buildAdminEmail(teamName, captain, titulares, reservas, currentTeamSize));
 
     var promise = Promise.resolve({ skipped: true });
     if (emailJsReady) {
@@ -343,7 +386,7 @@ function initForm() {
         team_name: teamName,
         team_label: teamName,
         modes: 'Valorant 5x5',
-        registration_type: 'Equipe 5x5',
+        registration_type: 'Equipe (' + currentTeamSize + ' titulares)',
         event_date: '20 de junho de 2026',
         event_name: 'Valorant Championship Devs Conectados'
       });
@@ -352,15 +395,20 @@ function initForm() {
     promise.then(function () {
       btn.disabled = false;
       btn.textContent = 'Enviar inscrição';
+
+      var incompleteNote = currentTeamSize < 5
+        ? ' Como sua equipe está incompleta (' + currentTeamSize + ' jogadores), ela poderá ser remontada pela organização junto com outras equipes incompletas para fechar os times de 5 e montar as chaves.'
+        : '';
+
       if (!emailJsReady) {
         showSuccessScreen({
           teamLabel: '⟨ ' + teamName.toUpperCase() + ' ⟩',
-          body: 'Sua inscrição foi enviada ao administrador, mas a confirmação por email não pôde ser enviada porque o EmailJS não está configurado. Use ?admin=1 para configurar.'
+          body: 'Sua inscrição foi enviada ao administrador, mas a confirmação por email não pôde ser enviada porque o EmailJS não está configurado.' + incompleteNote
         });
       } else {
         showSuccessScreen({
           teamLabel: '⟨ ' + teamName.toUpperCase() + ' ⟩',
-          body: 'Sua equipe foi registrada com sucesso! Um email de confirmação foi enviado ao capitão. Aguarde a divulgação das chaves no Discord.'
+          body: 'Sua equipe foi registrada com sucesso! Um email de confirmação foi enviado ao capitão.' + incompleteNote + ' Aguarde a divulgação das chaves no Discord.'
         });
       }
     }).catch(function (err) {

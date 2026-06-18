@@ -38,7 +38,7 @@
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="index.html">Home</a>
         <a class="active" href="inscricao.html">Inscrição</a>
-        <a href="docs/Regulamento_Devs_Conectados.pdf" target="_blank" rel="noopener">Regulamento</a>
+        <a href="docs/Regulamento_Valorant_Devs_Conectados.pdf" target="_blank" rel="noopener">Regulamento</a>
       </nav>
     </header>
 
@@ -85,18 +85,18 @@
         <div class="header-logo">&lt;/&gt;</div>
         <h1 id="form-title">Valorant</h1>
         <div class="header-sub-title">Championship</div>
-        <p class="header-sub">5x5 competitivo - 20 de junho de 2026 - 19:00</p>
+        <p class="header-sub">5x5 competitivo - 20 de junho de 2026 - 20:00</p>
         <div class="header-divider"></div>
       </section>
 
       <div class="event-strip">
-        <div class="event-chip"><span class="dot"></span>20 de junho - 19:00</div>
+        <div class="event-chip"><span class="dot"></span>20 de junho - 20:00</div>
         <div class="event-chip"><span class="dot"></span>Valorant - Riot Games</div>
         <div class="event-chip"><span class="dot"></span>Equipes 5x5</div>
         <div class="event-chip"><span class="dot"></span>Eliminação direta</div>
       </div>
 
-      <a class="reg-banner" href="docs/Regulamento_Devs_Conectados.pdf" target="_blank" rel="noopener">
+      <a class="reg-banner" href="docs/Regulamento_Valorant_Devs_Conectados.pdf" target="_blank" rel="noopener">
         <span class="reg-banner-icon">PDF</span>
         <div class="reg-banner-text">
           <div class="reg-banner-title">Regulamento oficial do evento</div>
@@ -165,14 +165,60 @@
         <section class="card">
           <div class="card-header">
             <div class="card-num">03</div>
-            <div class="card-title">Jogadores titulares<small>4 jogadores além do capitão</small></div>
+            <div class="card-title">Tamanho da equipe<small>Inscreva-se com 2, 3, 4 ou 5 jogadores (capitão incluso)</small></div>
+          </div>
+          <div class="card-body">
+            <div class="field" id="f-team-size">
+              <label>Quantos jogadores sua equipe vai inscrever (com o capitão)?</label>
+              <div class="mode-grid">
+                <div class="mode-card sel" id="mc-size-2" data-size="2">
+                  <div>
+                    <span class="mode-icon">2</span>
+                    <span class="mode-name">Dupla</span>
+                    <span class="mode-sub">Capitão + 1</span>
+                  </div>
+                </div>
+                <div class="mode-card" id="mc-size-3" data-size="3">
+                  <div>
+                    <span class="mode-icon">3</span>
+                    <span class="mode-name">Trio</span>
+                    <span class="mode-sub">Capitão + 2</span>
+                  </div>
+                </div>
+                <div class="mode-card" id="mc-size-4" data-size="4">
+                  <div>
+                    <span class="mode-icon">4</span>
+                    <span class="mode-name">Quarteto</span>
+                    <span class="mode-sub">Capitão + 3</span>
+                  </div>
+                </div>
+                <div class="mode-card" id="mc-size-5" data-size="5">
+                  <div>
+                    <span class="mode-icon">5</span>
+                    <span class="mode-name">Completa</span>
+                    <span class="mode-sub">Capitão + 4</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="size-warning" id="size-warning">
+              <span class="size-warning-icon">!</span>
+              <span class="size-warning-text">Equipes incompletas podem ser <strong>remontadas pela organização</strong> para fechar os times de 5 e organizar as chaves do campeonato. Jogadores podem ser realocados entre equipes incompletas a critério da staff.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-num">04</div>
+            <div class="card-title">Jogadores titulares<small id="titulares-sub">Jogadores além do capitão</small></div>
           </div>
           <div class="card-body" id="titulares-body"></div>
         </section>
 
         <section class="card">
           <div class="card-header">
-            <div class="card-num">04</div>
+            <div class="card-num">05</div>
             <div class="card-title">Jogadores reservas<small>Opcional, até 2 reservas</small></div>
           </div>
           <div class="card-body">
@@ -198,7 +244,7 @@
 
         <section class="card">
           <div class="card-header">
-            <div class="card-num">05</div>
+            <div class="card-num">06</div>
             <div class="card-title">Confirmar inscrição</div>
           </div>
           <div class="card-body">

@@ -614,6 +614,114 @@ img { max-width: 100%; display: block; }
   line-height: 1.6;
 }
 
+/* ══════════════════════════ RULES ARCHIVE (regulamentos) ══════════════════════════ */
+.rules-archive {
+  margin-top: 22px;
+}
+
+.rules-archive-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: 3px;
+  color: var(--gray);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.rules-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.rules-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 8px;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.rules-card:hover {
+  background: var(--green-dim);
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+.rules-card.rules-card-red {
+  border-left-color: var(--red);
+}
+
+.rules-card.rules-card-red:hover {
+  background: var(--red-dim);
+  border-color: var(--red);
+}
+
+.rules-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rules-card-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  padding: 3px 9px;
+}
+
+.rules-card-red .rules-card-tag {
+  color: var(--red);
+  background: var(--red-dim);
+  border-color: var(--red);
+}
+
+.rules-card-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.rules-card h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.rules-card p {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .85rem;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+.rules-card-arrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: 1px;
+  color: var(--green);
+  margin-top: 4px;
+}
+
+.rules-card-red .rules-card-arrow {
+  color: var(--red);
+}
+
 /* ══════════════════════════ NEXT EVENT (CTA banner) ══════════════════════════ */
 .next-event {
   display: flex;
@@ -1245,6 +1353,61 @@ body.page-inscricao .field input::placeholder { color: #4a2a2e; }
 }
 
 .mode-card.sel .mode-name { color: var(--accent); }
+
+.size-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #2a1400;
+  border: 1px solid #ff8800;
+  border-left: 3px solid #ff8800;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-top: 4px;
+}
+
+.size-warning.full-team {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.size-warning-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background: #ff8800;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 700;
+  font-size: .75rem;
+}
+
+.size-warning.full-team .size-warning-icon {
+  background: var(--accent);
+}
+
+.size-warning-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .85rem;
+  color: #ffaa55;
+  line-height: 1.55;
+}
+
+.size-warning.full-team .size-warning-text {
+  color: var(--gray);
+}
+
+.size-warning-text strong {
+  color: #ffcc88;
+}
+
+.size-warning.full-team .size-warning-text strong {
+  color: var(--white);
+}
 
 /* ══════════════════════════ SUBMIT ══════════════════════════ */
 .submit-area {
