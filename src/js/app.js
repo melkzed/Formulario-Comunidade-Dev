@@ -129,7 +129,7 @@ function buildTitular(num) {
 
 function setTeamSize(size) {
   currentTeamSize = size;
-  [2, 3, 4, 5].forEach(function (s) {
+  [1, 2, 3, 4, 5].forEach(function (s) {
     var card = document.getElementById('mc-size-' + s);
     if (card) card.className = 'mode-card' + (s === size ? ' sel' : '');
   });
@@ -137,8 +137,8 @@ function setTeamSize(size) {
 }
 
 function updateTitularesVisibility() {
-  // titulares 2..5 ficam visíveis até currentTeamSize
-  for (var i = 2; i <= 5; i++) {
+  // titulares 1..5 ficam visíveis até currentTeamSize
+  for (var i = 1; i <= 5; i++) {
     var block = document.getElementById('block-t' + i);
     if (!block) continue;
     block.style.display = (i <= currentTeamSize) ? '' : 'none';
