@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscrição - Valorant Championship - Devs Conectados</title>
   <link rel="icon" href="icon/icon.jpeg" type="image/jpeg">
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cinzel:wght@700;900&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <link rel="stylesheet" href="src/css/style.css">
 </head>
@@ -50,15 +52,18 @@
       <div class="setup-banner-body" id="setup-body">
         <div class="setup-step">
           <div class="step-num">1</div>
-          <div class="step-text">Acesse <a href="https://www.emailjs.com" target="_blank" rel="noopener">emailjs.com</a> e use a conta conectada ao email da organização.</div>
+          <div class="step-text">Acesse <a href="https://www.emailjs.com" target="_blank" rel="noopener">emailjs.com</a>
+            e use a conta conectada ao email da organização.</div>
         </div>
         <div class="setup-step">
           <div class="step-num">2</div>
-          <div class="step-text">Copie o <strong>Service ID</strong>, o <strong>Template ID</strong> e a <strong>Public Key</strong>.</div>
+          <div class="step-text">Copie o <strong>Service ID</strong>, o <strong>Template ID</strong> e a <strong>Public
+              Key</strong>.</div>
         </div>
         <div class="setup-step">
           <div class="step-num">3</div>
-          <div class="step-text">Cole os valores abaixo e clique em <strong>Salvar e ativar</strong>. Este painel aparece apenas com <code>?admin=1</code>.</div>
+          <div class="step-text">Cole os valores abaixo e clique em <strong>Salvar e ativar</strong>. Este painel
+            aparece apenas com <code>?admin=1</code>.</div>
         </div>
         <div class="config-row">
           <div class="config-field">
@@ -113,7 +118,7 @@
           </div>
           <div class="card-body">
             <div class="field" id="f-team">
-              <label for="team-name">Nome da equipe</label>
+              <label for="team-name">Nome da equipe ou jogador</label>
               <input type="text" id="team-name" placeholder="Ex: Devs Esports" maxlength="40" autocomplete="off">
               <span class="err-msg">Informe o nome da equipe</span>
             </div>
@@ -165,12 +170,20 @@
         <section class="card">
           <div class="card-header">
             <div class="card-num">03</div>
-            <div class="card-title">Tamanho da equipe<small>Inscreva-se com 2, 3, 4 ou 5 jogadores (capitão incluso)</small></div>
+            <div class="card-title">Tamanho da equipe<small>Inscreva-se com 2, 3, 4 ou 5 jogadores (capitão
+                incluso)</small></div>
           </div>
           <div class="card-body">
             <div class="field" id="f-team-size">
               <label>Quantos jogadores sua equipe vai inscrever (com o capitão)?</label>
               <div class="mode-grid">
+                <div class="mode-card" id="mc-size-1" data-size="1">
+                  <div>
+                    <span class="mode-icon">1</span>
+                    <span class="mode-name">Solo</span>
+                    <span class="mode-sub">Somente capitão</span>
+                  </div>
+                </div>
                 <div class="mode-card sel" id="mc-size-2" data-size="2">
                   <div>
                     <span class="mode-icon">2</span>
@@ -203,7 +216,9 @@
             </div>
             <div class="size-warning" id="size-warning">
               <span class="size-warning-icon">!</span>
-              <span class="size-warning-text">Equipes incompletas podem ser <strong>remontadas pela organização</strong> para fechar os times de 5 e organizar as chaves do campeonato. Jogadores podem ser realocados entre equipes incompletas a critério da staff.</span>
+              <span class="size-warning-text">Equipes incompletas podem ser <strong>remontadas pela organização</strong>
+                para fechar os times de 5 e organizar as chaves do campeonato. Jogadores podem ser realocados entre
+                equipes incompletas a critério da staff.</span>
             </div>
           </div>
         </section>
@@ -250,7 +265,8 @@
           <div class="card-body">
             <div class="submit-area">
               <button type="submit" class="submit-btn" id="submit-btn">Enviar inscrição</button>
-              <div class="submit-note">Ao enviar você confirma que leu e aceita o regulamento. A confirmação será enviada ao email do capitão.</div>
+              <div class="submit-note">Ao enviar você confirma que leu e aceita o regulamento. A confirmação será
+                enviada ao email do capitão.</div>
             </div>
           </div>
         </section>
