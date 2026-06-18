@@ -156,7 +156,7 @@ function buildTitular(num) {
   body.appendChild(block);
 }
 
-<<<<<<< HEAD
+
 function updateTitularesVisibility() {
   for (var i = 2; i <= 5; i++) {
     var block = document.getElementById("block-t" + i);
@@ -191,21 +191,7 @@ function updateTitularesVisibility() {
   // titulares 2..5 ficam visíveis até currentTeamSize
   for (var i = 2; i <= 5; i++) {
     var block = document.getElementById("block-t" + i);
-=======
-function setTeamSize(size) {
-  currentTeamSize = size;
-  [1, 2, 3, 4, 5].forEach(function (s) {
-    var card = document.getElementById('mc-size-' + s);
-    if (card) card.className = 'mode-card' + (s === size ? ' sel' : '');
-  });
-  updateTitularesVisibility();
-}
 
-function updateTitularesVisibility() {
-  // titulares 1..5 ficam visíveis até currentTeamSize
-  for (var i = 1; i <= 5; i++) {
-    var block = document.getElementById('block-t' + i);
->>>>>>> 615cbe87ceb68e22b762a95a79165668f0aef0dc
     if (!block) continue;
     block.style.display = i <= currentTeamSize ? "" : "none";
   }
