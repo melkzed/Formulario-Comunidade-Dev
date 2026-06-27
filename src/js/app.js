@@ -347,7 +347,7 @@ function closeSuccess() {
 function buildAdminEmail(teamName, captain, titulares, reservas, teamSize) {
   var lines = [
     "INSCRIÇÃO — VALORANT CHAMPIONSHIP DEVS CONECTADOS",
-    "Data: 20 de junho de 2026 — 20:00",
+    "Data: 27 de junho de 2026 — 20:00",
     "",
     "EQUIPE: " + teamName,
     "TAMANHO INFORMADO: " +
@@ -528,7 +528,7 @@ function initForm() {
         team_label: teamName,
         modes: "Valorant 5x5",
         registration_type: "Equipe (" + currentTeamSize + " titulares)",
-        event_date: "20 de junho de 2026",
+        event_date: "27 de junho de 2026",
         event_name: "Valorant Championship Devs Conectados",
       });
     }
